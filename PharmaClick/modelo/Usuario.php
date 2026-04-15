@@ -7,7 +7,7 @@ class Usuario{
         $this->acceso = $db->pdo;
     }
     function Loguearse($dni, $pass){
-        $sql ="SELECT * FROM usuario inner join tipo_us on us_tipo=id_tipo_us  where dni_us=:dni and contraseña_us=:pass";
+        $sql ="SELECT * FROM usuario inner join tipo_us on us_tipo=id_tipo_us  where dni_us=:dni and contrasena_us=:pass";
         $query = $this->acceso->prepare($sql);
         $query->execute(array(':dni'=>$dni,':pass'=>$pass));
         $this->objetos=$query->fetchall();
@@ -26,5 +26,73 @@ class Usuario{
         $query = $this->acceso->prepare($sql);
         $query->execute(array(':id'=>$id_usuario, ':telefono'=>$telefono, ':residencia'=>$residencia, ':correo'=>$correo, ':adicional'=>$adicional));
     }
+
+    function cambiar_contra($id_usuario,$oldpass, $newpass){
+        $sql ="SELECT * FROM usuario where id_usuario=:id and contrasena_us=:oldpass";
+        $query = $this->acceso->prepare($sql);
+        $query->execute(array(':id'=>$id_usuario, ':oldpass'=>$oldpass));
+        $this->objetos = $query->fetchall();
+        if(!empty($this->objetos)){
+            $sql="UPDATE usuario SET contrasena_us=:newpass where id_usuario=:id";
+            $query=$this->acceso->prepare($sql);
+            $query->execute(array(':id'=>$id_usuario, ':newpass'=>$newpass));
+            echo 'update';
+        }
+        else{
+            echo 'noupdate';
+        }
+    }
+
+function buscar(){
+    if(!empty($_POST['consulta'])){
+        $consulta = $_POST['consulta'];
+        $sql="SELECT id_usuario, nombre_us, apellidos_us, edad, dni_us, telefono_us, residencia_us, adicional_us, avatar, nombre_tipo, us_tipo 
+                FROM usuario 
+                JOIN tipo_us ON us_tipo = id_tipo_us 
+                WHERE nombre_us LIKE :consulta";
+        $query = $this->acceso->prepare($sql);
+        $query->execute(array(':consulta' => "%$consulta%"));
+        $this->objetos=$query->fetchAll();
+        return $this->objetos;
+    } else {
+        // Importante incluir us_tipo para que el JS sepa si ocultar el botón
+        $sql="SELECT id_usuario, nombre_us, apellidos_us, edad, dni_us, telefono_us, residencia_us, adicional_us, avatar, nombre_tipo, us_tipo 
+                FROM usuario 
+                JOIN tipo_us ON us_tipo = id_tipo_us 
+                ORDER BY id_usuario LIMIT 25";
+        $query = $this->acceso->prepare($sql);
+        $query->execute();
+        $this->objetos=$query->fetchAll();
+        return $this->objetos;
+    }
+}
+
+function crear($nombre, $apellido, $edad, $dni, $pass, $tipo, $avatar){
+    $sql="SELECT id_usuario FROM usuario WHERE dni_us=:dni";
+    $query = $this->acceso->prepare($sql);
+    $query->execute(array(':dni'=>$dni));
+    $this->objetos=$query->fetchAll();
+
+    if(!empty($this->objetos)){
+        echo 'noadd';
+    }
+    else{
+        $sql="INSERT INTO usuario(nombre_us, apellidos_us, edad, dni_us, contrasena_us, us_tipo, avatar) 
+                VALUES (:nombre, :apellido, :edad, :dni, :pass, :tipo, :avatar)";
+        $query = $this->acceso->prepare($sql);
+        // Se eliminaron los espacios y comillas extra en el array
+        $query->execute(array(
+            ':nombre'   => $nombre,
+            ':apellido' => $apellido,
+            ':edad'     => $edad,
+            ':dni'      => $dni,
+            ':pass'     => $pass,
+            ':tipo'     => $tipo,
+            ':avatar'   => $avatar
+        ));          
+        echo 'add'; // Faltaba el punto y coma
+    }
+}
+
 }
 ?>

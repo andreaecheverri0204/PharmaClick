@@ -1,6 +1,6 @@
 <?php
 session_start();
-if($_SESSION['us_tipo']==1){
+if($_SESSION['us_tipo']==1||$_SESSION['us_tipo']==3){
     include_once 'layouts/header.php';
 ?>
 <!-- SI ES ADMIN MUESTRA LA PAGINA -->
@@ -20,21 +20,57 @@ if($_SESSION['us_tipo']==1){
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Cambiar Contraseña</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
         </div>
         <div class="modal-body">
-            ...
+            <!-- Aqui vamos a mostrar la imagen de perfil, despues de darle click al boton de Cambiar Password-->
+            <div class="text-center">
+                <img src="../img/usuario.png" class="profile-user-img img-fluid img-circle">
+            </div>
+            <!-- Aqui vamos a mostrar el nombre, en la pestaña que se despliega despues de darle click al boton de Cambiar Password-->
+            <div class="text-center">
+                <b>
+                    <?php
+                        echo $_SESSION['nombre_us'];
+                    ?>
+                </b>
+            </div>
+                <div class="alert alert-success text-center" id="update" style="display:none;">
+                    <span><i class="fas fa-check m-1"></i>Se ha cambiado la contraseña correctamente</span>
+                </div>
+                <div class="alert alert-danger text-center" id="noupdate" style="display:none;">
+                    <span><i class="fas fa-times m-1"></i>No se ha podido cambiar la contraseña</span>
+                </div>
+            <form id="form-pass" >
+                <dib class="input-group mb-3 ">
+                <div class="input-group-prepend">
+                    <!-- Aqui vamos a mostrar un candado con el boton de Cambiar Password-->
+                    <span class="input-group-text"><i class="fas fa-unlock-alt"></i></span>
+                </div>
+                <input id="oldpass" type="password" class="form-control" placeholder="Ingrese su contraseña actual">
+                </dib>
+                <dib class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <!-- Aqui vamos a mostrar un candado con el boton de Cambiar Password-->
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                </div>
+                <input id="newpass" type="text" class="form-control" placeholder="Ingrese su contraseña nueva">
+                </dib>
+                
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn bg-gradient-primary">Guardar Cambios</button>
+            </form>
         </div>
     </div>
     </div>
 </div>
+
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -66,6 +102,9 @@ if($_SESSION['us_tipo']==1){
                                     <div class="text-center">
                                         <img src="../img/usuario.png" class="profile-user-img img-fluid img-circle">
                                     </div>
+                                    <!--<div class="mt-1 text-center">
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#cambiophoto"> Cambiar Avatar</button>
+                                    </div>-->
 
                                     <!-- hidden osea que va estar oculto este es para llamar la informacion de la base de datos
                                     y la pueda mostrar en el front-->
@@ -90,7 +129,7 @@ if($_SESSION['us_tipo']==1){
                                                     <!--Que tenga como un color azul, es como una insignia-->
                                                     <span id="us_tipo" class="float-right badge badge-primary">Administrador</span>
                                             </li>
-                                            <button  data-toggle="modal" data-target="#cambiocontra" type="button" class="col-sm-10 btn btn-block btn-outline-primary btn-sm">Cambiar Password</button>
+                                            <button  data-toggle="modal" data-target="#cambiocontra" type="button" class="col-sm-10 btn btn-block btn bg-gradient-primary btn-sm">Cambiar Password</button>
                                         </ul>
                                 </div>
                             </div>

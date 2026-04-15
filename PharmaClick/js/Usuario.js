@@ -68,4 +68,31 @@ $(document).ready(function() {
         }
         e.preventDefault();
     });
+
+    $('#form-pass').submit(e=>{
+        let id_usuario = $('#id_usuario').val();
+        let oldpass=$('#oldpass').val();
+        let newpass=$('#newpass').val();
+        funcion='cambiar_contra';
+        $.post('../controlador/UsuarioController.php', {id_usuario,funcion,oldpass,newpass},(response)=>{
+            //console.log(response);
+            if(response=='update'){
+                    // Animación de éxito
+                    $('#update').hide('slow').show('1000').delay(1000).hide('slow');
+                    // Actualizamos la info de la izquierda con los nuevos datos
+                    $('#form-pass').trigger('reset');
+
+            }else{
+
+            $('#noupdate').hide('slow').show('1000').delay(1000).hide('slow');
+            
+            $('#form-pass').trigger('reset');
+
+            }
+
+        })
+        e.preventDefault();
+    });
+
+
 });

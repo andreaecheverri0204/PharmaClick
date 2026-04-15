@@ -70,10 +70,18 @@
                 with font-awesome or any other icon font library -->
             <li class="nav-header">Usuario</li>
             <li class="nav-item">
-                <a href="../vista/editar_datos_personales.php" class="nav-link">
+                <a href="editar_datos_personales.php" class="nav-link">
                 <i class="nav-icon fas fa-user-cog"></i>
                 <p>
                     Editar Informacion
+                </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="adm_usuario.php" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                    Gestion Usuarios
                 </p>
                 </a>
             </li>
