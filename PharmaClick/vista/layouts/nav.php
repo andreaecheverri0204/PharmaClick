@@ -1,5 +1,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <!-- sweetalert2 
+    <link rel="stylesheet" href="../css/sweetalert2.css">-->
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../css/css/all.min.css">
     <!-- Ionicons -->
@@ -85,15 +86,45 @@
                 </p>
                 </a>
             </li>
-            <li class="nav-header">EXAMPLES</li>
+            <li class="nav-header">ALMACEN</li>
             <li class="nav-item">
-                <a href="../gallery.html" class="nav-link">
-                <i class="nav-icon far fa-image"></i>
+                <a href="adm_atributo.php" class="nav-link">
+                <i class="nav-icon fas fa-vials"></i>
                 <p>
-                    Gallery
+                    Gestion Atributos
                 </p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="adm_producto.php" class="nav-link">
+                <i class="fas fa-cubes mr-2" style="font-size: 1.5rem;"></i>
+                <p>
+                    Gestion Productos
+                </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="adm_lote.php" class="nav-link">
+                <i class="fas fa-box mr-2" style="font-size: 1.2rem;"></i>
+            
+                <p>
+                    Gestion lotes
+                </p>
+                </a>
+            </li>
+            <li class="nav-header">Compras</li>
+            <li class="nav-item">
+                <a href="adm_proveedor.php" class="nav-link">
+                <i class="fas fa-truck mr-2" style="font-size: 1.2rem;"></i> 
+                <p>
+                    Gestion Proveedores
+                </p>
+                </a>
+            </li>
+
+
+    
+            
 
             </ul>
         </nav>

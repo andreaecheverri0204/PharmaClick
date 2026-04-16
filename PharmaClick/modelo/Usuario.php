@@ -14,7 +14,7 @@ class Usuario{
         return $this->objetos;
     }
     function obtener_datos($id){
-        // Usamos el ID directamente en el WHERE
+        
         $sql ="SELECT * FROM usuario join tipo_us on us_tipo=id_tipo_us WHERE id_usuario=:id";
         $query = $this->acceso->prepare($sql);
         $query->execute(array(':id'=>$id));
@@ -55,7 +55,7 @@ function buscar(){
         $this->objetos=$query->fetchAll();
         return $this->objetos;
     } else {
-        // Importante incluir us_tipo para que el JS sepa si ocultar el botón
+        
         $sql="SELECT id_usuario, nombre_us, apellidos_us, edad, dni_us, telefono_us, residencia_us, adicional_us, avatar, nombre_tipo, us_tipo 
                 FROM usuario 
                 JOIN tipo_us ON us_tipo = id_tipo_us 
@@ -80,7 +80,7 @@ function crear($nombre, $apellido, $edad, $dni, $pass, $tipo, $avatar){
         $sql="INSERT INTO usuario(nombre_us, apellidos_us, edad, dni_us, contrasena_us, us_tipo, avatar) 
                 VALUES (:nombre, :apellido, :edad, :dni, :pass, :tipo, :avatar)";
         $query = $this->acceso->prepare($sql);
-        // Se eliminaron los espacios y comillas extra en el array
+        
         $query->execute(array(
             ':nombre'   => $nombre,
             ':apellido' => $apellido,
@@ -90,8 +90,14 @@ function crear($nombre, $apellido, $edad, $dni, $pass, $tipo, $avatar){
             ':tipo'     => $tipo,
             ':avatar'   => $avatar
         ));          
-        echo 'add'; // Faltaba el punto y coma
+        echo 'add'; 
     }
+}
+
+function eliminar($id){
+    $sql="DELETE FROM usuario WHERE id_usuario=:id";
+    $query = $this->acceso->prepare($sql);
+    $query->execute(array(':id'=>$id));
 }
 
 }

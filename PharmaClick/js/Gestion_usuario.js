@@ -1,19 +1,22 @@
-$(document).ready(function(){
-    buscar_datos(); // Carga inicial sin filtro
+$(document).ready(function() {
+    // 1. Obtener el tipo de usuario desde el input hidden de tu PHP
+    var tipo_usuario = $('#tipo_usuario').val();
+    buscar_datos();
 
-    function buscar_datos(consulta){
+    function buscar_datos(consulta) {
         let funcion = 'buscar_usuarios_adm';
-        // Enviamos 'consulta' explícitamente
-        $.post('../controlador/UsuarioController.php', {consulta: consulta, funcion: funcion}, (response) => {
-            if(!response.startsWith('[')){
+        $.post('../controlador/UsuarioController.php', { consulta: consulta, funcion: funcion }, (response) => {
+            if (!response.startsWith('[')) {
                 console.error("Error del servidor:", response);
                 return;
             }
+
             const usuarios = JSON.parse(response);
             let template = '';
             usuarios.forEach(usuario => {
+                // CORRECCIÓN: Se eliminó el div duplicado y se estructuró correctamente usuarioId
                 template += `
-                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                <div usuarioId="${usuario.id}" class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
                     <div class="card bg-light">
                         <div class="card-header text-muted border-bottom-0">${usuario.tipo}</div>
                         <div class="card-body pt-0">
@@ -33,9 +36,10 @@ $(document).ready(function(){
                             </div>
                         </div>
                         <div class="card-footer text-right">`;
-                
-                if(usuario.tipo_sesion == 1) { 
-                    template += `<button class="btn btn-sm btn-danger mr-1"><i class="fas fa-trash-alt mr-1"></i>Eliminar</button>`;
+
+                // CORRECCIÓN: Solo el Admin (1) ve el botón y DEBE tener la clase 'eliminar'
+                if (tipo_usuario == 1) {
+                    template += `<button class="eliminar btn btn-sm btn-danger mr-1"><i class="fas fa-trash-alt mr-1"></i>Eliminar</button>`;
                 }
 
                 template += `
@@ -48,47 +52,54 @@ $(document).ready(function(){
         });
     }
 
-    // Buscador mejorado
-    $(document).on('keyup', '#buscar', function(){
+    // Buscador
+    $(document).on('keyup', '#buscar', function() {
         let valor = $(this).val();
-        // Si el buscador está vacío, buscar_datos() traerá todos por defecto
-        buscar_datos(valor); 
+        buscar_datos(valor);
     });
 
-$('#form-crear').submit(e => {
-    let nombre = $('#nombre').val();
-    let apellido = $('#apellido').val();
-    let edad = $('#edad').val();
-    let dni = $('#dni').val();
-    let pass = $('#pass').val();
-    let tipo = 2; // O el valor que desees por defecto para nuevos usuarios
-    let funcion = 'crear_usuario';
+$(document).on('click', '.eliminar', (e) => {
+    // 1. Extraer el ID de la tarjeta (card)
+    const elemento = $(e.currentTarget).closest('[usuarioId]');
+    const id = $(elemento).attr('usuarioId'); 
+    const funcion = 'eliminar_usuario';
 
-    $.post('../controlador/UsuarioController.php', {nombre, apellido, edad, dni, pass, tipo, funcion}, (response) => {
-        // Esto imprimirá la respuesta en tu consola de Chrome/Brave
-        console.log("Respuesta del servidor: " + response);
-
-if(response.trim() == 'add'){
-            // Mostramos la alerta de éxito
-            $('#add').hide().show('slow'); // Asegura que se vea con animación
-            $('#add').delay(3000).fadeOut(1000); // Se desvanece tras 3 segundos
-
-            // Limpiamos y refrescamos
-            $('#form-crear').trigger('reset');
-            buscar_datos(); // Refresca las cards
+    // 2. Únicamente confirmar la acción
+    if (confirm('¿Realmente desea eliminar este usuario?')) {
+        
+        $.post('../controlador/UsuarioController.php', {id, funcion}, (response) => {
             
-            // Opcional: Cerrar el modal automáticamente después de mostrar la alerta
-            // setTimeout(() => { $('#crearusuario').modal('hide'); }, 3000);
-            
-        } else if(response.trim() == 'noadd'){
-            // Mostramos la alerta de error (DNI duplicado)
-            $('#noadd').hide().show('slow');
-            $('#noadd').delay(3000).fadeOut(1000);
-            $('#form-crear').trigger('reset');
-        } else {
-            console.log("Error inesperado: " + response);
-        }
-    });
-    e.preventDefault();
+            // Si el controlador confirma el borrado, refrescamos la vista
+            if (response.trim() === 'borrado') {
+                // 3. Recargar datos para actualizar la interfaz
+                buscar_datos(); 
+            } else {
+                // En caso de error técnico, se registra en la consola para depuración
+                console.error("Error en la eliminación: " + response);
+            }
+        });
+    }
 });
+
+    // FUNCIÓN CREAR
+    $('#form-crear').submit(e => {
+        let nombre = $('#nombre').val();
+        let apellido = $('#apellido').val();
+        let edad = $('#edad').val();
+        let dni = $('#dni').val();
+        let pass = $('#pass').val();
+        let tipo = 2;
+        let funcion = 'crear_usuario';
+
+        $.post('../controlador/UsuarioController.php', { nombre, apellido, edad, dni, pass, tipo, funcion }, (response) => {
+            if (response.trim() == 'add') {
+                $('#add').hide().show('slow').delay(3000).fadeOut(1000);
+                $('#form-crear').trigger('reset');
+                buscar_datos();
+            } else if (response.trim() == 'noadd') {
+                $('#noadd').hide().show('slow').delay(3000).fadeOut(1000);
+            }
+        });
+        e.preventDefault();
+    });
 });

@@ -48,7 +48,7 @@ session_destroy();
                             <input type="password" name="pass" class="input">
                         </div>
                     </div>
-                    <a href="">Created Warpiece</a>
+                    <a href=""></a>
                     <input type="submit" class="btn" value="Iniciar Sesion">
             </form>
         </div>

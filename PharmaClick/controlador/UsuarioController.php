@@ -103,4 +103,15 @@ if($_POST['funcion']=='crear_usuario'){
 }
 
 
+if($_POST['funcion'] == 'eliminar_usuario'){
+    session_start();
+    $id = $_POST['id'];
+    if($_SESSION['us_tipo'] == 1){
+        $usuario->eliminar($id);
+        echo 'borrado'; // Solo esta palabra
+    } else {
+        echo 'no_permitido';
+    }
+}
+
 ?>
