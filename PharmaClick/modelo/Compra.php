@@ -8,21 +8,29 @@ class Compra {
     public function __construct() {
         $db = new Conexion();
         $this->acceso = $db->pdo;
-        $this->db = $this->acceso; // Compartimos la conexión para manejar la transacción desde el controlador
+        $this->db = $db->pdo;
     }
 
-    public function crear_compra($cliente, $dni, $total, $id_usuario) {
-        // Ajusta los nombres de tus campos si difieren en tu tabla de Base de Datos
-        $sql = "INSERT INTO venta(fecha, cliente, dni, total, id_vendedor) VALUES(NOW(), :cliente, :dni, :total, :id_usuario)";
-        $query = $this->acceso->prepare($sql);
-        $query->execute(array(
-            ':cliente' => $cliente,
-            ':dni' => $dni,
-            ':total' => $total,
-            ':id_usuario' => $id_usuario
-        ));
-        // Retornamos el ID autogenerado de esta venta para usarlo en el detalle
-        return $this->acceso->lastInsertId();
+    public function crear_compra($cliente, $dni, $total, $vendedor) {
+        try {
+            // Usamos las columnas reales: cliente, dni, total, vendedor
+            $sql = "INSERT INTO venta(cliente, dni, total, vendedor) VALUES(:cliente, :dni, :total, :vendedor)";
+            $query = $this->acceso->prepare($sql);
+            
+            $resultado = $query->execute(array(
+                ':cliente' => $cliente,
+                ':dni'     => $dni,
+                ':total'   => $total,
+                ':vendedor'=> $vendedor
+            ));
+
+            if ($resultado) {
+                return $this->acceso->lastInsertId();
+            }
+            return false;
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
 ?>

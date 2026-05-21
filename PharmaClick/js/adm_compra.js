@@ -4,15 +4,26 @@ $(document).ready(function () {
     // Dibujar la tabla e importes al cargar la página
     renderizarTablaCompra();
 
-    // 1. EVENTO: MODIFICAR CANTIDAD DENTRO DE LA TABLA
+    // 1. EVENTO: MODIFICAR CANTIDAD DENTRO DE LA TABLA (VALIDADO)
     $(document).on('keyup change', '.cantidad-producto', function () {
         const id = $(this).closest('tr').attr('prodId');
-        const nuevaCantidad = $(this).val();
+        let nuevaCantidad = parseInt($(this).val());
+        const maxStock = parseInt($(this).attr('max'));
+
+        // Si el usuario digita un número mayor al stock disponible en el input max
+        if (nuevaCantidad > maxStock) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Stock Excedido',
+                text: `Solo quedan ${maxStock} unidades disponibles de este producto.`
+            });
+            nuevaCantidad = maxStock;
+            $(this).val(maxStock); // Forzamos el valor al límite máximo en pantalla
+        }
 
         if (nuevaCantidad > 0 && nuevaCantidad != "") {
             moduloCompra.actualizarCantidad(id, nuevaCantidad);
             
-            // Actualizar el subtotal de la fila de inmediato
             const precio = parseFloat($(this).closest('tr').find('.precio-unitario').text());
             $(this).closest('tr').find('.subtotal-fila').text((precio * nuevaCantidad).toFixed(2));
             
@@ -40,7 +51,7 @@ $(document).ready(function () {
         location.href = 'adm_catalogo.php'; 
     });
 
-    // 5. EVENTO PRINCIPAL: REALIZAR / PROCESAR COMPRA (ENVÍO AJAX)
+    // 5. EVENTO PRINCIPAL: REALIZAR / PROCESAR COMPRA (ENVÍO AJAX SINCRONIZADO)
     $('#realizar-compra').click(function (e) {
         e.preventDefault();
 
@@ -67,24 +78,65 @@ $(document).ready(function () {
             productos: JSON.stringify(productos)
         };
 
-        $.post('../controlador/CompraController.php', datos, (response) => {
-            console.log(response);
-            if (response.trim() === 'success') {
+        $.ajax({
+            url: '../controlador/CompraController.php',
+            type: 'POST',
+            data: datos,
+            success: function (response) {
+                try {
+                    // Evaluamos dinámicamente si la respuesta ya se parseó automáticamente
+                    let res = (typeof response === 'object') ? response : JSON.parse(response);
+
+                    if (res.status === 'success') {
+                        // SI LA COMPRA ES EXITOSA: Limpiamos todo de raíz
+                        moduloCompra.vaciar(); 
+                        
+                        $('#nombre-cliente').val('');
+                        $('#doc-cliente').val('');
+                        $('#pago-cliente').val('');
+                        $('#vuelto-cliente').text('0.00');
+
+                        renderizarTablaCompra();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Compra Realizada',
+                            text: 'La transacción se procesó y el stock fue actualizado.',
+                        }).then(() => {
+                            location.href = 'adm_catalogo.php'; 
+                        });
+
+                    } else {
+                        // SI EL BACKEND BLOQUEA POR FALTA DE STOCK: Muestra el mensaje detallado sin limpiar el carrito
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'No se puede procesar la compra',
+                            text: res.msg,
+                            confirmButtonText: 'Corregir Cantidad'
+                        });
+                    }
+
+                } catch (err) {
+                    console.error("Error parseando respuesta JSON:", response, err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Respuesta Inesperada',
+                        text: 'El servidor devolvió datos corruptos o un error interno.'
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error en comunicación asíncrona:", xhr.responseText);
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Compra Exitosa',
-                    text: 'La compra se ha registrado correctamente y el stock fue actualizado.',
-                }).then(() => {
-                    moduloCompra.vaciar(); // Limpia el localStorage
-                    location.href = 'adm_catalogo.php'; // Redirige al catálogo limpio
+                    icon: 'error',
+                    title: 'Error de Red / Servidor',
+                    text: 'No se pudo conectar correctamente con el controlador de compras.'
                 });
-            } else {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo procesar la compra: ' + response });
             }
         });
     });
 
-    // --- FUNCIONES DE RENDERIZADO ---
+    // --- FUNCIONES DE RENDERIZADO CON RESTRICCIÓN DE STOCK ---
     function renderizarTablaCompra() {
         const productos = moduloCompra.obtenerArticulos();
         let template = '';
@@ -96,6 +148,8 @@ $(document).ready(function () {
             $('#realizar-compra').prop('disabled', false);
             productos.forEach(prod => {
                 const subtotalFila = prod.precio * prod.cantidad;
+                const maxStock = prod.stock !== undefined ? prod.stock : 999; 
+
                 template += `
                     <tr prodId="${prod.id}">
                         <td>${prod.id}</td>
@@ -104,7 +158,7 @@ $(document).ready(function () {
                         <td>${prod.adicional}</td>
                         <td class="precio-unitario">${prod.precio.toFixed(2)}</td>
                         <td>
-                            <input type="number" class="form-control form-control-sm cantidad-producto" value="${prod.cantidad}" min="1" style="width: 80px;">
+                            <input type="number" class="form-control form-control-sm cantidad-producto" value="${prod.cantidad}" min="1" max="${maxStock}" style="width: 80px;">
                         </td>
                         <td class="subtotal-fila font-weight-bold">${subtotalFila.toFixed(2)}</td>
                         <td>
@@ -129,6 +183,8 @@ $(document).ready(function () {
         const efectivo = parseFloat($('#pago-cliente').val());
         if (!isNaN(efectivo)) {
             $('#vuelto-cliente').text(moduloCompra.calcularCambio(efectivo).toFixed(2));
+        } else {
+            $('#vuelto-cliente').text('0.00');
         }
     }
 });

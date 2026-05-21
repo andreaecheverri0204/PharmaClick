@@ -51,9 +51,15 @@ class Lote {
         $query = $this->acceso->prepare($sql);
         $query->execute(array(':id_lote' => $id_lote));
     }
-    public function obtener_lotes_por_producto($id_producto) {
-    // Buscamos los lotes que pertenezcan al producto y tengan stock, ordenando para vencer primero (PEPS)
-    $sql = "SELECT id_lote, stock FROM lote WHERE id_producto = :id_producto AND stock > 0 ORDER BY vencimiento ASC";
+
+
+public function obtener_lotes_por_producto($id_producto) {
+    // Agregamos p.nombre a la consulta JOIN
+    $sql = "SELECT l.id_lote, l.stock, p.nombre as producto_nombre 
+            FROM lote l
+            JOIN producto p ON l.lote_id_prod = p.id_producto
+            WHERE l.lote_id_prod = :id_producto AND l.stock > 0 
+            ORDER BY l.vencimiento ASC";
     $query = $this->acceso->prepare($sql);
     $query->execute(array(':id_producto' => $id_producto));
     return $query->fetchAll(PDO::FETCH_OBJ);

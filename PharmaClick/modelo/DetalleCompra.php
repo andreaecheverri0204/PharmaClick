@@ -9,14 +9,14 @@ class DetalleCompra {
         $this->acceso = $db->pdo;
     }
 
-    public function registrar_detalle($id_compra, $id_lote, $cantidad, $subtotal) {
-        $sql = "INSERT INTO detalle_venta(id_venta, id_lote, cantidad, subtotal) VALUES(:id_compra, :id_lote, :cantidad, :subtotal)";
+    public function registrar_detalle($id_compra, $id_lote, $cantidad) {
+        // Ajustado de forma estricta a tus tres columnas reales: id_det_lote y det_cantidad
+        $sql = "INSERT INTO detalle_venta(id_det_lote, det_cantidad) VALUES(:id_lote, :cantidad)";
         $query = $this->acceso->prepare($sql);
+        
         $query->execute(array(
-            ':id_compra' => $id_compra,
-            ':id_lote' => $id_lote,
-            ':cantidad' => $cantidad,
-            ':subtotal' => $subtotal
+            ':id_lote'   => $id_lote,
+            ':cantidad' => $cantidad
         ));
     }
 }
