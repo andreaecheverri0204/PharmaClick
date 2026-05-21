@@ -25,6 +25,7 @@ if (!empty($_POST['funcion']) && $_POST['funcion'] == 'crear') {
     }
 }
 
+
 if (!empty($_POST['funcion']) && $_POST['funcion'] == 'buscar') {
     $laboratorio->buscar();
     $json = array();

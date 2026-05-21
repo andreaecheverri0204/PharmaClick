@@ -5,7 +5,7 @@ class Conexion{
     private $puerto = 3307;
     private $charset = "utf8";
     private $usuario = "root";
-    private $contrasena = "1020";
+    private $contrasena = "";
     public $pdo = null;
     private $atributos = [PDO::ATTR_CASE => PDO::CASE_LOWER,
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

@@ -28,6 +28,7 @@ class Laboratorio {
             echo 'add-laboratorio';
         }
     }
+    
     function buscar() {
         if(!empty($_POST['consulta'])){
             $consulta = $_POST['consulta'];
