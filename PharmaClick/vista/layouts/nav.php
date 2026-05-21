@@ -121,6 +121,15 @@
                 </p>
                 </a>
             </li>
+            <li class="nav-header">Ventas</li>
+                        <li class="nav-item">
+                <a href="adm_ventas.php" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                    Historial ventas
+                </p>
+                </a>
+            </li>
 
 
     

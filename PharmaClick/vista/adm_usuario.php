@@ -1,7 +1,7 @@
 <?php
 session_start();
 // Solo permitimos el acceso si el usuario está logueado (Admin o Técnico)
-if($_SESSION['us_tipo'] == 1 || $_SESSION['us_tipo'] == 2){
+if($_SESSION['us_tipo'] == 1 ){
     include_once 'layouts/header.php';
 ?>
     <title>Gestión de Usuarios - PharmaClick</title>
@@ -40,6 +40,7 @@ if($_SESSION['us_tipo'] == 1 || $_SESSION['us_tipo'] == 2){
                             <label for="edad">Edad</label>
                             <input id="edad" type="text" class="form-control" placeholder="Ingrese edad" required>
                         </div>
+                        
                         <div class="form-group">
                             <label for="dni">DNI</label>
                             <input id="dni" type="text" class="form-control" placeholder="Ingrese DNI" required>

@@ -61,4 +61,5 @@ if ($funcion == 'registrar_compra') {
         while (ob_get_level() > 0) ob_end_clean();
         echo json_encode(['status' => 'error', 'msg' => $e->getMessage()]);
     }
+    
 }
