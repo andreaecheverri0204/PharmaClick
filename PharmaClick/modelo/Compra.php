@@ -13,7 +13,7 @@ class Compra {
 
     public function crear_compra($cliente, $dni, $total, $vendedor) {
         try {
-            // Usamos las columnas reales: cliente, dni, total, vendedor
+            
             $sql = "INSERT INTO venta(cliente, dni, total, vendedor) VALUES(:cliente, :dni, :total, :vendedor)";
             $query = $this->acceso->prepare($sql);
             

@@ -1,6 +1,6 @@
 <?php
 session_start();
-// Validación de seguridad para asegurar que solo usuarios permitidos (ej. Administrador/Contador) ingresen
+
 if ($_SESSION['us_tipo'] == 1 || $_SESSION['us_tipo'] == 3) {
     include_once 'layouts/header.php';
 ?>
@@ -146,7 +146,7 @@ if ($_SESSION['us_tipo'] == 1 || $_SESSION['us_tipo'] == 3) {
 <?php
     include_once 'layouts/footer.php';
 } else {
-    // Redirección forzada al login/index si intenta burlar la URL sin permisos correctos
+    
     header('Location: ../index.php');
 }
 ?>

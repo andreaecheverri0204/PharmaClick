@@ -225,7 +225,7 @@ if($_SESSION['us_tipo']==1||$_SESSION['us_tipo']==3){
 
 
 <?php
-    include_once 'layouts/footer.php'; // Aquí se debe cargar JQuery
+    include_once 'layouts/footer.php'; 
 ?>
 <script src="../js/Usuario.js"></script>
 <?php

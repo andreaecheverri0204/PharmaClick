@@ -2,14 +2,12 @@ $(document).ready(function() {
     var edit = false;
     var id_usuario = $('#id_usuario').val(); 
 
-    // Inicializar datos al cargar la página
     buscar_usuario(id_usuario);
 
     function buscar_usuario(dato) {
         let funcion = 'buscar_usuario';
         $.post('../controlador/UsuarioController.php', { dato, funcion }, (response) => {
             const usuario = JSON.parse(response);
-            // Esto actualiza la información estática de la izquierda
             $('#nombre_us').html(usuario.nombre);
             $('#telefono_us').html(usuario.telefono);
             $('#residencia_us').html(usuario.residencia);
@@ -18,7 +16,6 @@ $(document).ready(function() {
         });
     }
 
-    // A. EVENTO PARA CARGAR DATOS (Botón de la izquierda con clase .edit)
     $(document).on('click', '.edit', function(e) {
         e.preventDefault();
         console.log("Modo edición activado: Cargando datos...");
@@ -27,7 +24,6 @@ $(document).ready(function() {
         
         $.post('../controlador/UsuarioController.php', { funcion: funcion_capturar, id_usuario }, (response) => {
             const data = JSON.parse(response);
-            // Llenamos los cuadros de texto de la derecha
             $('#telefono').val(data.telefono);
             $('#residencia').val(data.residencia);
             $('#correo').val(data.correo);
@@ -52,9 +48,7 @@ $(document).ready(function() {
                 console.log("Respuesta del servidor:", response);
                 
                 if (response.trim() == 'editado') {
-                    // Animación de éxito
                     $('#editado').hide('slow').show('1000').hide('4000');
-                    // Actualizamos la info de la izquierda con los nuevos datos
                     $('form-usuario').trigger('reset');
                     buscar_usuario(id_usuario);
                     edit = false; 
@@ -75,11 +69,8 @@ $(document).ready(function() {
         let newpass=$('#newpass').val();
         funcion='cambiar_contra';
         $.post('../controlador/UsuarioController.php', {id_usuario,funcion,oldpass,newpass},(response)=>{
-            //console.log(response);
             if(response=='update'){
-                    // Animación de éxito
                     $('#update').hide('slow').show('1000').delay(1000).hide('slow');
-                    // Actualizamos la info de la izquierda con los nuevos datos
                     $('#form-pass').trigger('reset');
 
             }else{

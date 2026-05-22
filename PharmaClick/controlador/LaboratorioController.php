@@ -6,8 +6,8 @@ if (!empty($_POST['funcion']) && $_POST['funcion'] == 'crear') {
     $nombre = $_POST['nombre_laboratorio'];
     $avatar = 'Laboratorios.png';
     
-    // 1. Verificamos si el nombre ya existe antes de crear
-    $laboratorio->buscar(); // Esto llena $laboratorio->objetos
+
+    $laboratorio->buscar(); 
     $existe = false;
     
     foreach ($laboratorio->objetos as $objeto) {
@@ -19,9 +19,9 @@ if (!empty($_POST['funcion']) && $_POST['funcion'] == 'crear') {
 
     if (!$existe) {
         $laboratorio->crear($nombre, $avatar);
-        echo 'add'; // IMPORTANTE: Respondemos al JS que todo salió bien
+        echo 'add'; 
     } else {
-        echo 'noadd'; // Respondemos que ya existe para que el JS muestre la alerta roja
+        echo 'noadd'; 
     }
 }
 

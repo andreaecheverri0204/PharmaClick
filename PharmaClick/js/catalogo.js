@@ -1,13 +1,10 @@
 $(document).ready(function () {
-    // Inicializar el carrito desde LocalStorage si ya tiene datos guardados
     let carrito = JSON.parse(localStorage.getItem('carrito_pharmaclick')) || [];
     
-    // Ejecutar funciones iniciales al cargar la página
     mostrar_lotes_riesgo();
     buscar_productos();
     actualizar_interfaz_carrito();
 
-    // Evento del buscador de productos por teclado
     $(document).on('keyup', '#buscar-producto', function() {
         let valor = $(this).val();
         if (valor != "") {
@@ -17,7 +14,6 @@ $(document).ready(function () {
         }
     });
 
-    // 1. CARGAR TABLA SUPERIOR: LOTES EN RIESGO
     function mostrar_lotes_riesgo() {
         let funcion = 'lote_riesgo';
         $.post('../controlador/LoteController.php', { funcion }, (response) => {
@@ -71,7 +67,6 @@ $(document).ready(function () {
         });
     }
 
-    // 2. CARGAR TARJETAS INFERIORES: BUSCAR PRODUCTOS
     function buscar_productos(consulta) {
         let funcion = 'buscar';
         $.post('../controlador/ProductoController.php', { funcion, consulta }, (response) => {
@@ -79,7 +74,6 @@ $(document).ready(function () {
             let template = '';
             
             productos.forEach(producto => {
-                // Verificar si este producto ya está en el carrito guardado
                 const en_carrito = carrito.find(p => p.id == producto.id);
                 let stock_disponible = producto.stock;
                 if (en_carrito) {
@@ -122,14 +116,12 @@ $(document).ready(function () {
         });
     }
 
-    // 3. EVENTO: AGREGAR PRODUCTO AL CARRITO (Actualizado con Precio)
     $(document).on('click', '.agregar-carrito', (e) => {
         const elemento = $(e.target).closest('[prodId]');
         const id_producto = $(elemento).attr('prodId');
         const nombre = $(elemento).find('.prod-nombre').text();
         const concentracion = $(elemento).find('.prod-concentracion').text();
         const adicional = $(elemento).find('.prod-adicional').text();
-        // CAPTURAMOS EL PRECIO (Limpiando espacios si los hay)
         const precio = parseFloat($(elemento).find('.text-success').text().trim());
         
         let stock_elemento = $(elemento).find('.prod-stock');
@@ -143,7 +135,7 @@ $(document).ready(function () {
                 nombre: nombre,
                 concentracion: concentracion,
                 adicional: adicional,
-                precio: precio, // <-- Guardado con éxito
+                precio: precio,
                 cantidad: 1
             };
 
@@ -172,7 +164,6 @@ $(document).ready(function () {
         }
     });
 
-    // NUEVO EVENTO: REDIRECCIÓN AL PROCESAR COMPRA
     $('#procesar-compra').click(() => {
         if (carrito.length === 0) {
             Swal.fire({
@@ -182,11 +173,11 @@ $(document).ready(function () {
             });
             return;
         }
-        // Nos redirige a la vista de pasarela de pago/solicitud
+
         location.href = 'adm_compra.php';
     });
 
-    // 4. EVENTO: ELIMINAR UN ELEMENTO DEL CARRITO
+
     $(document).on('click', '.borrar-producto-carrito', (e) => {
         const id_eliminar = $(e.target).closest('tr').attr('prodId');
         const producto_encontrado = carrito.find(prod => prod.id == id_eliminar);
@@ -205,7 +196,7 @@ $(document).ready(function () {
         }
     });
 
-    // 5. EVENTO: VACIAR TODO EL CARRITO
+
     $('#vaciar-carrito').click(() => {
         carrito.forEach(prod => {
             const tarjeta_producto = $(`[prodId="${prod.id}"]`);

@@ -28,7 +28,7 @@ if ($_POST['funcion'] == 'rellenar_proveedores') {
     $json = array();
     foreach ($producto->objetos as $objeto) {
         $json[] = array(
-            'id' => $objeto->id_proveedor, // Verifica que sea id_proveedor en tu DB
+            'id' => $objeto->id_proveedor, 
             'nombre' => $objeto->nombre
         );
     }
@@ -46,13 +46,12 @@ if ($_POST['funcion'] == 'crear_lote') {
 }
 
 if ($_POST['funcion'] == 'borrar') {
-    // 1. Recibimos el ID desde el JavaScript
+    
     $id = $_POST['id'];
     
-    // 2. Ejecutamos la función del modelo
     $producto->borrar($id);
 }
-// Al final de tu archivo ProductoController.php
+
 if ($_POST['funcion'] == 'rellenar_laboratorios') {
     $producto->rellenar_laboratorios();
     $json = array();

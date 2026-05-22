@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    // 1. Carga inicial de datos
     buscar_lab();
 
     function buscar_lab(consulta) {
@@ -17,13 +16,10 @@ $(document).ready(function () {
                     </td>
                 </tr>`;
         });
-        // IMPORTANTE: .html(template) reemplaza todo. 
-        // Si usaras .append(template), se duplicarían los datos.
         $('#laboratorios').html(template); 
     });
 }
 
-    // 2. Buscador en tiempo real
     $(document).on('keyup', '#buscar-laboratorio', function () {
         let valor = $(this).val();
         if (valor != "") {
@@ -33,16 +29,13 @@ $(document).ready(function () {
         }
     });
 
-// Usamos un nombre de evento con "namespace" (.crear) para identificarlo y borrarlo específicamente
 $(document).off('submit.crear', '#form-crear-laboratorio');
 $(document).on('submit.crear', '#form-crear-laboratorio', function(e) {
     e.preventDefault();
     e.stopImmediatePropagation();
 
-    // Bloqueo visual y físico inmediato
     let btn = $(this).find('button[type="submit"]');
-    if(btn.hasClass('disabled')) return false; // Si ya se está procesando, no hagas nada
-    
+    if(btn.hasClass('disabled')) return false; 
     btn.addClass('disabled').prop('disabled', true);
 
     let nombre = $('#nombre-laboratorio').val();
@@ -62,7 +55,6 @@ $(document).on('submit.crear', '#form-crear-laboratorio', function(e) {
         btn.removeClass('disabled').prop('disabled', false);
     });
 });
-    // 4. Lógica para BORRAR LABORATORIO
     $(document).off('click', '.borrar-lab').on('click', '.borrar-lab', function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -72,7 +64,6 @@ $(document).on('submit.crear', '#form-crear-laboratorio', function(e) {
         const nombre = fila.find('td').eq(0).text();
         const funcion = 'borrar';
 
-        // Filtro de seguridad: Si no hay ID, no es de este script
         if (!id) return;
 
         if (confirm("¿Está seguro de que desea eliminar el laboratorio: " + nombre + "?")) {
@@ -80,7 +71,6 @@ $(document).on('submit.crear', '#form-crear-laboratorio', function(e) {
                 const respuesta = response.trim();
                 if (respuesta === 'borrado') {
                     fila.remove();
-                    // Opcional: alert("Eliminado");
                 } else {
                     alert("No se pudo borrar: " + respuesta);
                 }

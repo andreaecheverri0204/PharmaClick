@@ -1,13 +1,11 @@
 $(document).ready(function () {
-    // 1. Cargar datos iniciales
+
     rellenar_laboratorios();
     rellenar_tipos();
     rellenar_presentaciones();
     buscar_producto();
 
-    // --- SECCIÓN: CARGA DE SELECTORES (MODAL CREAR PRODUCTO) ---
 
-// Dentro de $(document).ready(function () {...})
 
 function rellenar_laboratorios() {
     let funcion = 'rellenar_laboratorios';
@@ -18,14 +16,14 @@ function rellenar_laboratorios() {
             laboratorios.forEach(lab => {
                 template += `<option value="${lab.id}">${lab.nombre}</option>`;
             });
-            $('#id_lab').html(template).trigger('change'); // El trigger es vital para Select2
+            $('#id_lab').html(template).trigger('change'); 
         } catch (e) {
             console.error("Error en laboratorios: ", response);
         }
     });
 }
 
-// Repite el .trigger('change') para tipos e id_pre
+
 function rellenar_tipos() {
     let funcion = 'rellenar_tipos';
     $.post('../controlador/ProductoController.php', { funcion }, (response) => {
@@ -50,7 +48,7 @@ function rellenar_presentaciones() {
     });
 }
 
-    // --- SECCIÓN: BÚSQUEDA Y LISTADO ---
+    
 
 function buscar_producto(consulta) {
     let funcion = 'buscar';
@@ -104,7 +102,7 @@ function buscar_producto(consulta) {
         }
     });
 
-    // --- SECCIÓN: CREACIÓN DE PRODUCTO ---
+
 
     $('#form-crear-producto').submit(e => {
         let nombre = $('#nombre_prod').val();
@@ -130,9 +128,7 @@ function buscar_producto(consulta) {
         e.preventDefault();
     });
 
-    // --- SECCIÓN: GESTIÓN DE LOTES ---
 
-// --- CARGAR PROVEEDORES EN EL MODAL ---
 function rellenar_proveedores() {
     let funcion = 'rellenar_proveedores';
     $.post('../controlador/ProductoController.php', { funcion }, (response) => {
@@ -141,12 +137,11 @@ function rellenar_proveedores() {
         proveedores.forEach(prov => {
             template += `<option value="${prov.id}">${prov.nombre}</option>`;
         });
-        // IMPORTANTE: El ID debe coincidir con el del SELECT en el HTML
+
         $('#id_prov').html(template); 
     });
 }
 
-// --- CARGAR PROVEEDORES EN EL MODAL ---
 function rellenar_proveedores() {
     let funcion = 'rellenar_proveedores';
     $.post('../controlador/ProductoController.php', { funcion }, (response) => {
@@ -155,12 +150,12 @@ function rellenar_proveedores() {
         proveedores.forEach(prov => {
             template += `<option value="${prov.id}">${prov.nombre}</option>`;
         });
-        // IMPORTANTE: El ID debe coincidir con el del SELECT en el HTML
+    
         $('#id_prov').html(template); 
     });
 }
 
-// --- EVENTO PARA ABRIR EL MODAL Y CARGAR DATOS ---
+
 $(document).on('click', '.lote', (e) => {
     const elemento = $(e.currentTarget).closest('.col-12');
     const id = $(elemento).attr('prodId');
@@ -169,33 +164,30 @@ $(document).on('click', '.lote', (e) => {
     $('#id_lote_prod').val(id);
     $('#nombre_producto_lote').text(nombre);
     
-    // Llamamos a la función de proveedores cada vez que se abre el modal
+
     rellenar_proveedores();
 });
 
-// --- CERRAR Y LIMPIAR MODAL ---
-// Esto asegura que si el usuario cierra el modal, los datos no se queden ahí
 $('[data-dismiss="modal"]').click(function() {
     $('#form-crear-lote').trigger('reset');
 });
 
-// --- CERRAR Y LIMPIAR MODAL ---
-// Esto asegura que si el usuario cierra el modal, los datos no se queden ahí
+
 $('[data-dismiss="modal"]').click(function() {
     $('#form-crear-lote').trigger('reset');
 });
-// A. Al hacer clic en el botón '+' de la card, pasamos el ID al modal
+
 $(document).on('click', '.lote', (e) => {
     const elemento = $(e.currentTarget).closest('.col-12');
     const id = $(elemento).attr('prodId');
     const nombre = $(elemento).attr('prodNombre');
     
-    $('#id_lote_prod').val(id); // Input oculto en tu modal
-    $('#nombre_producto_lote').text(nombre); // Título para saber qué editas
-    rellenar_proveedores(); // Carga la lista de proveedores
+    $('#id_lote_prod').val(id); 
+    $('#nombre_producto_lote').text(nombre); 
+    rellenar_proveedores(); 
 });
 
-// B. Envío del formulario del modal
+
 $('#form-crear-lote').submit(e => {
     let id_prod = $('#id_lote_prod').val();
     let id_prov = $('#id_prov').val();
@@ -209,13 +201,13 @@ $('#form-crear-lote').submit(e => {
         if (response.trim() == 'add-lote') {
             $('#add-lote-success').hide('slow').show('slow').delay(2000).hide('slow');
             $('#form-crear-lote').trigger('reset');
-            buscar_producto(); // Esto refresca el stock en la card automáticamente
+            buscar_producto(); 
         }
     });
     e.preventDefault();
 });
 
-    // --- SECCIÓN: ELIMINAR (CONFIRMACIÓN NATIVA) ---
+
 
     $(document).on('click', '.borrar', (e) => {
         const elemento = $(e.currentTarget).closest('.col-12');

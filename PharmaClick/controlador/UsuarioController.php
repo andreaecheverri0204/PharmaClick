@@ -23,7 +23,7 @@ if($_POST['funcion']=='buscar_usuario'){
             'sexo'=>$objeto->sexo_us,
             'adicional'=>$objeto->adicional_us
 
-            /*contiene todos los datos de la tabla que queremos obtener, despues lo pasamos al js*/
+        
         );
     }
     $jsonString = json_encode($json[0]); 
@@ -51,7 +51,7 @@ if($_POST['funcion']=='capturar_datos'){
 
 }
 
-/* comparar que funcion esta realizando*/
+
 if($_POST['funcion']=='editar_usuario'){
     $id_usuario=$_POST['id_usuario'];
     $telefono=$_POST['telefono'];
@@ -80,7 +80,7 @@ if($_POST['funcion'] == 'buscar_usuarios_adm'){
             'nombre'      => $objeto->nombre_us,
             'apellidos'   => $objeto->apellidos_us,
             'dni'         => $objeto->dni_us,
-            'tipo'        => $objeto->nombre_tipo, // Cambiado aquí también
+            'tipo'        => $objeto->nombre_tipo, 
             'telefono'    => $objeto->telefono_us,
             'residencia'  => $objeto->residencia_us,
             'adicional'   => $objeto->adicional_us,
@@ -108,7 +108,7 @@ if($_POST['funcion'] == 'eliminar_usuario'){
     $id = $_POST['id'];
     if($_SESSION['us_tipo'] == 1){
         $usuario->eliminar($id);
-        echo 'borrado'; // Solo esta palabra
+        echo 'borrado';
     } else {
         echo 'no_permitido';
     }

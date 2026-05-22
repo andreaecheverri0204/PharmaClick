@@ -1,6 +1,6 @@
 <?php
 session_start();
-// Filtro de seguridad: solo Admins (tipo 1 y 3) pueden entrar
+
 if ($_SESSION['us_tipo'] == 1 || $_SESSION['us_tipo'] == 2) {
     include_once 'layouts/header.php';
 ?>

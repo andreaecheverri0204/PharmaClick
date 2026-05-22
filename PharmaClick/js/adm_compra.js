@@ -1,16 +1,16 @@
 $(document).ready(function () {
     const moduloCompra = new Compra();
 
-    // Dibujar la tabla e importes al cargar la página
+    
     renderizarTablaCompra();
 
-    // 1. EVENTO: MODIFICAR CANTIDAD DENTRO DE LA TABLA (VALIDADO)
+    
     $(document).on('keyup change', '.cantidad-producto', function () {
         const id = $(this).closest('tr').attr('prodId');
         let nuevaCantidad = parseInt($(this).val());
         const maxStock = parseInt($(this).attr('max'));
 
-        // Si el usuario digita un número mayor al stock disponible en el input max
+        
         if (nuevaCantidad > maxStock) {
             Swal.fire({
                 icon: 'warning',
@@ -18,7 +18,7 @@ $(document).ready(function () {
                 text: `Solo quedan ${maxStock} unidades disponibles de este producto.`
             });
             nuevaCantidad = maxStock;
-            $(this).val(maxStock); // Forzamos el valor al límite máximo en pantalla
+            $(this).val(maxStock); 
         }
 
         if (nuevaCantidad > 0 && nuevaCantidad != "") {
@@ -31,27 +31,27 @@ $(document).ready(function () {
         }
     });
 
-    // 2. EVENTO: ELIMINAR UN PRODUCTO DE LA TABLA
+    
     $(document).on('click', '.quitar-producto', function () {
         const id = $(this).closest('tr').attr('prodId');
         moduloCompra.eliminarArticulo(id);
         renderizarTablaCompra(); 
     });
 
-    // 3. EVENTO: CALCULAR VUELTO EN TIEMPO REAL
+    
     $(document).on('keyup', '#pago-cliente', function () {
         const efectivo = parseFloat($(this).val());
         const vuelto = moduloCompra.calcularCambio(efectivo);
         $('#vuelto-cliente').text(vuelto.toFixed(2));
     });
 
-    // 4. EVENTO: SEGUIR COMPRANDO (Regresa al catálogo manteniendo los productos)
+    
     $('#seguir-comprando').click(function (e) {
         e.preventDefault();
         location.href = 'adm_catalogo.php'; 
     });
 
-    // 5. EVENTO PRINCIPAL: REALIZAR / PROCESAR COMPRA (ENVÍO AJAX SINCRONIZADO)
+    
     $('#realizar-compra').click(function (e) {
         e.preventDefault();
 
@@ -69,7 +69,7 @@ $(document).ready(function () {
             return;
         }
 
-        // Estructura de datos que viaja al backend
+        
         let datos = {
             funcion: 'registrar_compra',
             cliente: nombre_cliente,
@@ -84,11 +84,11 @@ $(document).ready(function () {
             data: datos,
             success: function (response) {
                 try {
-                    // Evaluamos dinámicamente si la respuesta ya se parseó automáticamente
+                    
                     let res = (typeof response === 'object') ? response : JSON.parse(response);
 
                     if (res.status === 'success') {
-                        // SI LA COMPRA ES EXITOSA: Limpiamos todo de raíz
+                        
                         moduloCompra.vaciar(); 
                         
                         $('#nombre-cliente').val('');
@@ -107,7 +107,7 @@ $(document).ready(function () {
                         });
 
                     } else {
-                        // SI EL BACKEND BLOQUEA POR FALTA DE STOCK: Muestra el mensaje detallado sin limpiar el carrito
+
                         Swal.fire({
                             icon: 'error',
                             title: 'No se puede procesar la compra',
@@ -136,7 +136,7 @@ $(document).ready(function () {
         });
     });
 
-    // --- FUNCIONES DE RENDERIZADO CON RESTRICCIÓN DE STOCK ---
+
     function renderizarTablaCompra() {
         const productos = moduloCompra.obtenerArticulos();
         let template = '';

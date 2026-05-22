@@ -1,6 +1,5 @@
 class Compra {
     constructor() {
-        // Recupera los productos compartidos con el catálogo
         this.articulos = JSON.parse(localStorage.getItem('carrito_pharmaclick')) || [];
     }
 
@@ -32,13 +31,11 @@ class Compra {
         localStorage.setItem('carrito_pharmaclick', JSON.stringify(this.articulos));
     }
 
-    // --- CALCULOS MATEMÁTICOS ---
     calcularTotal() {
         return this.articulos.reduce((sum, prod) => sum + (prod.precio * prod.cantidad), 0);
     }
 
     calcularSubtotal(tasaImpuesto = 0.18) {
-        // Asumiendo que el precio del catálogo ya incluye IGV (Precio Neto + Impuesto)
         return this.calcularTotal() / (1 + tasaImpuesto);
     }
 

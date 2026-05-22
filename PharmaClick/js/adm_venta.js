@@ -1,12 +1,11 @@
 $(document).ready(function() {
-    // Carga inicial de la tabla
+
     listar_ventas();
 
-    // 1. FUNCIÓN PARA LISTAR VENTAS
     function listar_ventas() {
         $.post('../controlador/VentaController.php', { funcion: 'listar_ventas' }, function(response) {
             let template = '';
-            // Validamos que la respuesta sea un arreglo antes de iterar
+            
             if(Array.isArray(response)) {
                 response.forEach(v => {
                     template += `
@@ -31,17 +30,17 @@ $(document).ready(function() {
     }
 
 
-    // 3. FUNCIÓN PARA BORRAR VENTA
+    
     $(document).on('click', '.btn-borrar', function() {
         let id = $(this).attr('id_venta');
         if(confirm('¿Está seguro de eliminar esta venta permanentemente?')) {
-            // En tu .post de borrar_venta
+        
             $.post('../controlador/VentaController.php', { funcion: 'borrar_venta', id_venta: id }, function(response) {
-                console.log("Respuesta del servidor:", response); // <--- ESTO ES CLAVE
+                console.log("Respuesta del servidor:", response);
                 if(response.trim() === 'success') {
                     listar_ventas();
                 } else {
-                    alert("Error: " + response); // Verás el error exacto aquí
+                    alert("Error: " + response); 
                 }
             });
         }

@@ -11,7 +11,6 @@ class Lote {
     }
 
     function buscar($consulta = null) {
-        // Usamos LEFT JOIN para que si algún campo está vacío, la consulta no se rompa y devuelva los datos de igual forma
         $sql_base = "SELECT l.id_lote as id_lote, l.stock as stock, l.vencimiento as vencimiento, 
                     p.nombre as nombre, p.concentracion as concentracion, p.adicional as adicional, p.avatar as avatar, 
                     l_lab.nombre as laboratorio, t.nombre as tipo, pre.nombre as presentacion,
@@ -28,7 +27,6 @@ class Lote {
             $query = $this->acceso->prepare($sql);
             $query->execute(array(':consulta' => "%$consulta%"));
         } else {
-            // Quitamos el LIMIT 25 para asegurarnos de que en el catálogo se listen todos los lotes en riesgo correctamente
             $sql = $sql_base . " ORDER BY l.vencimiento ASC"; 
             $query = $this->acceso->prepare($sql);
             $query->execute();
@@ -54,7 +52,6 @@ class Lote {
 
 
 public function obtener_lotes_por_producto($id_producto) {
-    // Agregamos p.nombre a la consulta JOIN
     $sql = "SELECT l.id_lote, l.stock, p.nombre as producto_nombre 
             FROM lote l
             JOIN producto p ON l.lote_id_prod = p.id_producto

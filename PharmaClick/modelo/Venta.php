@@ -9,7 +9,7 @@ class Venta {
 
     public function listar_ventas() {
         try {
-            // Asegúrate de que los campos 'vendedor' y 'id_usuario' sean correctos
+        
             $sql = "SELECT v.id_venta, v.fecha, v.cliente, v.dni, v.total, u.nombre_us 
                     FROM venta v 
                     JOIN usuario u ON v.vendedor = u.id_usuario 

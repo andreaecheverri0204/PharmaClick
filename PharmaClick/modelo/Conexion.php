@@ -12,7 +12,7 @@ class Conexion{
         PDO::ATTR_ORACLE_NULLS => PDO::NULL_EMPTY_STRING,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ];
 
-    //METODO CONTRUCTOR
+
 
 function __construct() {
     $this->pdo = new PDO("mysql:dbname={$this->db};host={$this->servidor};port={$this->puerto};charset={$this->charset}", $this->usuario, $this->contrasena, $this->atributos);

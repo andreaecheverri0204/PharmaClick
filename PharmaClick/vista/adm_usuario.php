@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Solo permitimos el acceso si el usuario está logueado (Admin o Técnico)
 if($_SESSION['us_tipo'] == 1 ){
     include_once 'layouts/header.php';
 ?>

@@ -9,7 +9,6 @@ $(document).ready(function () {
         let funcion = 'crear';
 
         $.post('../controlador/ProveedorController.php', { funcion, nombre, telefono, correo, direccion }, (response) => {
-            // Usamos trim() para limpiar espacios invisibles que causan errores
             let respuesta = response.trim();
             
             if (respuesta == 'add') {
@@ -21,7 +20,6 @@ $(document).ready(function () {
                 $('#noadd-prov').hide('slow').show('slow').delay(2000).hide('slow');
                 $('#form-crear-proveedor').trigger('reset');
             } else {
-                // Si llega algo que no es add/noadd, lo vemos en consola para debug
                 console.log("Respuesta inesperada del servidor:", respuesta);
             }
         });
@@ -31,13 +29,11 @@ $(document).ready(function () {
     function buscar_proveedor(consulta) {
     let funcion = 'buscar';
     $.post('../controlador/ProveedorController.php', { funcion, consulta }, (response) => {
-        // 1. Si la respuesta ya es un objeto, no necesitamos trim() ni JSON.parse()
         let proveedores;
         
         if (typeof response === 'object') {
             proveedores = response;
         } else {
-            // 2. Si es texto, verificamos que no sea el mensaje de éxito 'add' antes de parsear
             if (response.trim() === 'add') return;
             try {
                 proveedores = JSON.parse(response);
@@ -47,7 +43,7 @@ $(document).ready(function () {
             }
         }
 
-        // 3. Dibujar las cards
+        // Dibujar las cards
         let template = '';
         proveedores.forEach(prov => {
             template += `

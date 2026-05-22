@@ -9,7 +9,6 @@ if ($_POST['funcion'] == 'crear') {
     $direccion = $_POST['direccion'];
     $avatar = 'Proveedor.png'; 
     
-    // El modelo debe hacer el echo de 'add' o 'noadd'
     $proveedor->crear($nombre, $telefono, $correo, $direccion, $avatar);
 }
 
@@ -26,12 +25,11 @@ if ($_POST['funcion'] == 'buscar') {
             'avatar'    => '../img/' . $objeto->avatar 
         );
     }
-    // IMPORTANTE: Limpiar cualquier salida previa y establecer el header
+    
     header('Content-Type: application/json');
     echo json_encode($json);
 }
 
-// Acción: BORRAR un proveedor
 if ($_POST['funcion'] == 'borrar') {
     $id = $_POST['id'];
     $proveedor->borrar($id);

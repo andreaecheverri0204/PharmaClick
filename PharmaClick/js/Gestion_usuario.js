@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    // 1. Obtener el tipo de usuario desde el input hidden de tu PHP
     var tipo_usuario = $('#tipo_usuario').val();
     buscar_datos();
 
@@ -14,7 +13,6 @@ $(document).ready(function() {
             const usuarios = JSON.parse(response);
             let template = '';
             usuarios.forEach(usuario => {
-                // CORRECCIÓN: Se eliminó el div duplicado y se estructuró correctamente usuarioId
                 template += `
                 <div usuarioId="${usuario.id}" class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
                     <div class="card bg-light">
@@ -37,7 +35,6 @@ $(document).ready(function() {
                         </div>
                         <div class="card-footer text-right">`;
 
-                // CORRECCIÓN: Solo el Admin (1) ve el botón y DEBE tener la clase 'eliminar'
                 if (tipo_usuario == 1) {
                     template += `<button class="eliminar btn btn-sm btn-danger mr-1"><i class="fas fa-trash-alt mr-1"></i>Eliminar</button>`;
                 }
@@ -59,29 +56,23 @@ $(document).ready(function() {
     });
 
 $(document).on('click', '.eliminar', (e) => {
-    // 1. Extraer el ID de la tarjeta (card)
     const elemento = $(e.currentTarget).closest('[usuarioId]');
     const id = $(elemento).attr('usuarioId'); 
     const funcion = 'eliminar_usuario';
 
-    // 2. Únicamente confirmar la acción
     if (confirm('¿Realmente desea eliminar este usuario?')) {
         
         $.post('../controlador/UsuarioController.php', {id, funcion}, (response) => {
             
-            // Si el controlador confirma el borrado, refrescamos la vista
             if (response.trim() === 'borrado') {
-                // 3. Recargar datos para actualizar la interfaz
                 buscar_datos(); 
             } else {
-                // En caso de error técnico, se registra en la consola para depuración
                 console.error("Error en la eliminación: " + response);
             }
         });
     }
 });
 
-    // FUNCIÓN CREAR
     $('#form-crear').submit(e => {
         let nombre = $('#nombre').val();
         let apellido = $('#apellido').val();

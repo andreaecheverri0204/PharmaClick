@@ -34,7 +34,7 @@ function buscar($consulta = null) {
 }
 
 function crear($nombre, $concentracion, $adicional, $precio, $laboratorio, $tipo, $presentacion, $avatar) {
-    // Validamos si el producto existe antes de insertar
+    
     $sql = "SELECT id_producto FROM producto WHERE nombre=:nombre AND concentracion=:concentracion AND adicional=:adicional";
     $query = $this->acceso->prepare($sql);
     $query->execute(array(':nombre'=>$nombre, ':concentracion'=>$concentracion, ':adicional'=>$adicional));

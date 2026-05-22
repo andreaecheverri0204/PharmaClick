@@ -2,7 +2,7 @@ $(document).ready(function() {
     buscar_tipo();
     var funcion;
 
-    // --- BUSCADOR DINÁMICO ---
+    
     function buscar_tipo(consulta) {
         funcion = 'buscar';
         $.post('../controlador/TipoController.php', {consulta, funcion}, (response) => {
@@ -33,7 +33,7 @@ $(document).ready(function() {
         }
     });
 
-    // --- CREAR TIPO ---
+    
     $('#form-crear-tipo').submit(e => {
         let nombre = $('#nombre-tipo').val();
         funcion = 'crear';
@@ -41,7 +41,7 @@ $(document).ready(function() {
             if (response == 'add') {
                 $('#add-tipo').hide('slow').show('slow').delay(2000).hide('slow');
                 $('#form-crear-tipo').trigger('reset');
-                buscar_tipo(); // Recarga la tabla
+                buscar_tipo(); 
             } else {
                 $('#noadd-tipo').hide('slow').show('slow').delay(2000).hide('slow');
             }
@@ -49,7 +49,7 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
-    // --- ELIMINAR TIPO (SIN DOBLE CLIC) ---
+    
     $(document).off('click', '.borrar-tipo').on('click', '.borrar-tipo', (e) => {
         const elemento = $(e.currentTarget).closest('tr');
         const id = $(elemento).attr('tipoId');

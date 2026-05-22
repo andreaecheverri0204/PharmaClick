@@ -2,7 +2,7 @@
 include_once '../modelo/Tipo.php';
 $tipo = new Tipo();
 
-// Capturamos la función enviada por AJAX
+
 if ($_POST['funcion'] == 'crear') {
     $nombre = $_POST['nombre'];
     $tipo->crear($nombre);

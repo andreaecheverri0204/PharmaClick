@@ -24,7 +24,7 @@ session_destroy();
     <img class="fondo" src="img/wave.png" alt="">
     <div class="contenedor">
         <div class="img">
-            <img src="img/imgppal.svg" alt=""> <!--FALTA LA IMAGEN DEL FONDO-->
+            <img src="img/imgppal.svg" alt=""> 
         </div>
         <div class="contenido-login">
             <form action="controlador/LoginController.php" method="post" >

@@ -3,7 +3,7 @@ include_once '../modelo/Presentacion.php';
 $presentacion = new Presentacion();
 
 if ($_POST['funcion'] == 'crear') {
-    $nombre = $_POST['nombre']; // Asegúrate que el JS envíe 'nombre'
+    $nombre = $_POST['nombre']; 
     $presentacion->crear($nombre);
 }
 
@@ -13,18 +13,18 @@ if ($_POST['funcion'] == 'buscar') {
     $json = array();
     foreach ($presentacion->objetos as $objeto) {
         $json[] = array(
-            'id'     => $objeto->id_presentacion, // <-- ESTO ES "id" PARA EL JS
+            'id'     => $objeto->id_presentacion, 
             'nombre' => $objeto->nombre
         );
     }
     $jsonstring = json_encode($json);
-    echo $jsonstring; // UN SOLO ECHO EN TODO EL ARCHIVO
+    echo $jsonstring; 
 }
 
 if (isset($_POST['funcion']) && $_POST['funcion'] == 'borrar') {
     $id = $_POST['id'];
     $presentacion->borrar($id);
-    // El modelo ya hace el echo 'borrado', no pongas nada más aquí.
+   
 }
 
 
