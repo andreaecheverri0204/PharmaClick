@@ -13,7 +13,7 @@ Ejecutada en entorno local (XAMPP/Apache).
 
 
 A PharmaClick se le realizaron pruebas tales como 
-Pruebas Manuales Automatizadas
-Pruebas De Performance con JMeter
-Pruebas Funcionales Manuales
+- Pruebas Manuales Automatizadas.
+- Pruebas De Performance con JMeter.
+- Pruebas Funcionales Manuales.
 
